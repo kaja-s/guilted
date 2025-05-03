@@ -21,52 +21,20 @@ export interface FriendPreferences {
   budget: string;
 }
 
-interface FriendPreferencesFormProps {
-  onSubmit: (preferences: FriendPreferences) => void;
-  isLoading: boolean;
-}
-
-export function FriendPreferencesForm({
-  onSubmit,
-  isLoading,
-}: FriendPreferencesFormProps) {
-  const [preferences, setPreferences] = useState<FriendPreferences>({
-    interests: "",
-    loveLanguage: "",
-    budget: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(preferences);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setPreferences((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (value: string) => {
-    setPreferences((prev) => ({ ...prev, loveLanguage: value }));
-  };
-
+export function FriendPreferencesForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">{"Friend's Preferences"}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="interests">Interests & Hobbies</Label>
             <Textarea
               id="interests"
               name="interests"
               placeholder="What does your friend enjoy? (e.g., cooking, reading, hiking, art)"
-              value={preferences.interests}
-              onChange={handleChange}
               required
               className="min-h-[100px]"
             />
@@ -74,10 +42,7 @@ export function FriendPreferencesForm({
 
           <div className="space-y-2">
             <Label htmlFor="loveLanguage">Love Language</Label>
-            <Select
-              value={preferences.loveLanguage}
-              onValueChange={handleSelectChange}
-            >
+            <Select>
               <SelectTrigger id="loveLanguage">
                 <SelectValue placeholder="Select love language" />
               </SelectTrigger>
@@ -99,14 +64,12 @@ export function FriendPreferencesForm({
               id="budget"
               name="budget"
               placeholder="e.g., $20, $50, $100"
-              value={preferences.budget}
-              onChange={handleChange}
               required
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Generating Ideas..." : "Generate Gift Ideas"}
+          <Button type="submit" className="w-full">
+            {"Generate Gift Ideas"}
           </Button>
         </form>
       </CardContent>
