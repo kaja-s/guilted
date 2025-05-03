@@ -55,7 +55,7 @@ export function FriendPreferencesForm({
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl">Friend's Preferences</CardTitle>
+        <CardTitle className="text-2xl">{"Friend's Preferences"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
