@@ -49,7 +49,7 @@ export function FriendPreferencesForm() {
                 <SelectItem value="Words of Affirmation">
                   Words of Affirmation
                 </SelectItem>
-                <SelectItem value="Acts of Service">Acts of Service</SelectItem>
+                <SelectItem value="Acts of Service">Acts of Servic</SelectItem>
                 <SelectItem value="Receiving Gifts">Receiving Gifts</SelectItem>
                 <SelectItem value="Quality Time">Quality Time</SelectItem>
                 <SelectItem value="Physical Touch">Physical Touch</SelectItem>
