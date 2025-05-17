@@ -48,14 +48,12 @@ export function FriendPreferencesForm({
   });
 
   // e.preventDefault() says: “Don’t refresh the page like a regular form.” Instead, we call the onSubmit function we got from the parent, and give it the current answers.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(preferences);
   };
 
   //Then it updates our notebook (preferences) with the new answer. The name of the field (like "budget") and the new value (like "$50").
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -65,7 +63,6 @@ export function FriendPreferencesForm({
 
   // Takes the previous state (prev), spreads all its properties into a new object, and then updates the loveLanguage property to a new value.
   // This makes sure that only loveLanguage field is changed, while all other fields in the rpefereneces remain the same.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSelectChange = (value: string) => {
     setPreferences((prev) => ({ ...prev, loveLanguage: value }));
   };
@@ -76,7 +73,7 @@ export function FriendPreferencesForm({
         <CardTitle className="text-2xl">{"Friend's Preferences"}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Interests */}
           <div className="space-y-2">
             <Label htmlFor="interests">Interests & Hobbies</Label>
@@ -84,6 +81,7 @@ export function FriendPreferencesForm({
               id="interests"
               name="interests"
               placeholder="What does your friend enjoy? (e.g., cooking, reading, hiking, art)"
+              onChange={handleChange}
               required
               className="min-h-[100px]"
             />
@@ -92,7 +90,10 @@ export function FriendPreferencesForm({
           {/* Love Language */}
           <div className="space-y-2">
             <Label htmlFor="loveLanguage">Love Language</Label>
-            <Select>
+            <Select
+              value={preferences.loveLanguage}
+              onValueChange={handleSelectChange}
+            >
               <SelectTrigger id="loveLanguage">
                 <SelectValue placeholder="Select love language" />
               </SelectTrigger>
@@ -115,6 +116,8 @@ export function FriendPreferencesForm({
               id="budget"
               name="budget"
               placeholder="e.g., $20, $50, $100"
+              value={preferences.budget}
+              onChange={handleChange}
               required
             />
           </div>
