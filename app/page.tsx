@@ -12,15 +12,16 @@ export default function Home() {
   // friendPreferences – stores the answers from the form (e.g., hobbies, love language)
   const [friendPreferences, setFriendPreferences] =
     useState<FriendPreferences | null>(null);
-  // giftIdeas – a list of ideas from the agent
   const [giftIdeas, setGiftIdeas] = useState<GiftIdea[]>([]);
-  // selectedGift – what gift the user clicks on
   const [selectedGift, setSelectedGift] = useState<GiftIdea | null>(null);
-  // recipe – the detailed “how-to” for that gift
-  const [recipe, setRecipe] = useState<any | null>(null);
-  // isLoadingIdeas – shows a spinner while waiting for gift ideas
+  const [recipe, setRecipe] = useState<{
+    title: string;
+    estimatedPrice: string;
+    estimatedDuration: string;
+    materials: string[];
+    steps: string[];
+  } | null>(null);
   const [isLoadingIdeas, setIsLoadingIdeas] = useState(false);
-  // isLoadingRecipe – shows a spinner while waiting for the recipe
   const [isLoadingRecipe, setIsLoadingRecipe] = useState(false);
 
   {

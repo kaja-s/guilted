@@ -2,9 +2,9 @@
 // streamText: Like a helper that sends your message to GPT-4o and listens to its reply.
 // NextResponse: A helper from Next.js that makes it easy to reply to whoever called our API.
 
-import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { NextResponse } from "next/server";
+import { openai } from "@ai-sdk/openai";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
@@ -47,8 +47,9 @@ export async function POST(req: Request) {
     // Send the prompt to GPT-4o.
     // streamText(...): This sends the message and listens for the AI’s full response.
     // GPT returns a big text blob like: [ { "id": 1, "title": "Gift Title", "description": "Short description of the gift"}, ...]
+
     const { text } = await streamText({
-      model: openai("gpt-4o"),
+      model: openai.chat("gpt-4o"),
       prompt,
     });
 
