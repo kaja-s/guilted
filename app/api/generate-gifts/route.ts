@@ -48,6 +48,8 @@ export async function POST(req: Request) {
     // streamText(...): This sends the message and listens for the AI’s full response.
     // GPT returns a big text blob like: [ { "id": 1, "title": "Gift Title", "description": "Short description of the gift"}, ...]
 
+    console.log("Sending request to OpenAI...");
+
     const { text } = await streamText({
       model: openai.chat("gpt-4o"),
       prompt,
