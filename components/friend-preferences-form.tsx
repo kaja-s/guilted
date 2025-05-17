@@ -68,7 +68,7 @@ export function FriendPreferencesForm({
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md bg-white">
       <CardHeader>
         <CardTitle className="text-2xl">{"Friend's Preferences"}</CardTitle>
       </CardHeader>
@@ -123,7 +123,12 @@ export function FriendPreferencesForm({
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full"
+            variant="destructive"
+            disabled={isLoading}
+          >
             {isLoading ? "Generating ideas ..." : "Generate Gift Ideas"}
           </Button>
         </form>
