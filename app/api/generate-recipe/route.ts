@@ -51,3 +51,16 @@ export async function POST(req: Request) {
     );
   }
 }
+
+{
+  /* 
+      What's going on?
+      - Agent accepts the gift title and friend preferences.
+      - Crafts a GPT-4o prompt to generate a personalized recipe.
+      - Get's a recipe back in JSON format.
+      - Sends it to the front end to show it to the user.
+    
+      What's next:
+      1. Create a gift recipe page that, so that the user sees the information.
+      */
+}
