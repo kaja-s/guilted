@@ -13,6 +13,8 @@ export async function POST(req: Request) {
   try {
     const { friendPreferences } = await req.json();
 
+    console.log("Received preferences:", friendPreferences);
+
     {
       /* 
             Question that we want to ask GPT-4o.
@@ -50,13 +52,21 @@ export async function POST(req: Request) {
 
     console.log("Sending request to OpenAI...");
 
+    // Send the prompt to OpenAI
     const { text } = await streamText({
-      model: openai.chat("gpt-4o"),
+      model: openai("gpt-4o"),
       prompt,
     });
 
-    // JSON.parse turns a string into real data.
-    const giftIdeas = JSON.parse(await text);
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    // If text is a Promise, await it
+    const fullText = typeof text === "string" ? text : await text;
+
+    // Parse the response as JSON
+    const giftIdeas = JSON.parse(fullText);
+
+    console.log("Received response from OpenAI");
 
     // This line sends the gift ideas back to the browser or app.
     return NextResponse.json({ giftIdeas });
@@ -65,7 +75,7 @@ export async function POST(req: Request) {
     console.error("Error generating gift ideas:", error);
     return NextResponse.json(
       { error: "Failed to generate gift ideas." },
-      { status: 505 }
+      { status: 500 }
     );
   }
 }
