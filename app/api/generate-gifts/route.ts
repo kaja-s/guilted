@@ -4,32 +4,41 @@
 
 import { streamText } from "ai";
 import { NextResponse } from "next/server";
-import { openai } from "@ai-sdk/openai";
+import OpenAI from "openai";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
+
+const openaiApiKey = process.env.OPENAI_API_KEY;
+
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
+});
 
 // POST handles form submissions. We use await req.json() to read the message. friendPreferences includes the friend’s interests, love language, and budget.
 export async function POST(req: Request) {
   try {
-    const { friendPreferences } = await req.json();
-
-    console.log("Received preferences:", friendPreferences);
-
-    {
-      /* 
-            Question that we want to ask GPT-4o.
-            - Be creative
-            - Make homemade ideas
-            - Keep it personal
-            - Give me 2 gifts in a clean JSON format (like structured data)
-        */
+    if (!openaiApiKey) {
+      return NextResponse.json(
+        { error: "OpenAI API key not configured" },
+        { status: 500 }
+      );
     }
-    const prompt = `
-            Generate 2 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
 
-            Interests: ${friendPreferences.interests}
-            Love Language: ${friendPreferences.loveLanguage}
-            Budget: ${friendPreferences.budget}
+    const { interests, loveLanguage, budget } = await req.json();
+
+    if (!interests || !loveLanguage || !budget) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const prompt = `
+            Generate 3 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
+
+            Interests: ${interests}
+            Love Language: ${loveLanguage}
+            Budget: ${budget}
 
             For each gift idea, provide:
             1. A title
@@ -52,29 +61,38 @@ export async function POST(req: Request) {
 
     console.log("Sending request to OpenAI...");
 
-    // Send the prompt to OpenAI
-    const { text } = await streamText({
-      model: openai("gpt-4o"),
-      prompt,
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "gpt-3.5-turbo",
+      temperature: 0.7,
+      response_format: { type: "json_object" },
     });
+    const responseText = completion.choices[0].message.content;
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    if (!responseText) {
+      return NextResponse.json(
+        { error: "Failed to generate gift ideas" },
+        { status: 500 }
+      );
+    }
 
-    // If text is a Promise, await it
-    const fullText = typeof text === "string" ? text : await text;
-
-    // Parse the response as JSON
-    const giftIdeas = JSON.parse(fullText);
-
-    console.log("Received response from OpenAI");
-
-    // This line sends the gift ideas back to the browser or app.
-    return NextResponse.json({ giftIdeas });
-    // Send an error messag to the developer. Send a message to the user.
+    try {
+      const parsedResponse = JSON.parse(responseText);
+      return NextResponse.json(parsedResponse);
+    } catch (e) {
+      console.error("Failed to parse OpenAI response:", e);
+      return NextResponse.json(
+        {
+          error: "Failed to parse gift ideas",
+          rawResponse: responseText,
+        },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error("Error generating gift ideas:", error);
+    console.error("Error:", error);
     return NextResponse.json(
-      { error: "Failed to generate gift ideas." },
+      { error: "Failed to generate gift ideas" },
       { status: 500 }
     );
   }
