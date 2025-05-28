@@ -2,36 +2,16 @@
 // streamText: Like a helper that sends your message to GPT-4o and listens to its reply.
 // NextResponse: A helper from Next.js that makes it easy to reply to whoever called our API.
 
-import { streamText } from "ai";
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { generateText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
-
-const openai = new OpenAI({
-  apiKey: openaiApiKey,
-});
-
 // POST handles form submissions. We use await req.json() to read the message. friendPreferences includes the friend’s interests, love language, and budget.
 export async function POST(req: Request) {
   try {
-    if (!openaiApiKey) {
-      return NextResponse.json(
-        { error: "OpenAI API key not configured" },
-        { status: 500 }
-      );
-    }
-
     const { interests, loveLanguage, budget } = await req.json();
-
-    if (!interests || !loveLanguage || !budget) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
 
     const prompt = `
             Generate 3 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
