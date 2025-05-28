@@ -7,7 +7,6 @@ import { openai } from "@ai-sdk/openai";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
-const openaiApiKey = process.env.OPENAI_API_KEY;
 // POST handles form submissions. We use await req.json() to read the message. friendPreferences includes the friend’s interests, love language, and budget.
 export async function POST(req: Request) {
   try {
@@ -41,37 +40,18 @@ export async function POST(req: Request) {
 
     console.log("Sending request to OpenAI...");
 
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-3.5-turbo",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
+    const { text } = await generateText({
+      model: openai("gpt-4o"),
+      prompt,
     });
-    const responseText = completion.choices[0].message.content;
 
-    if (!responseText) {
-      return NextResponse.json(
-        { error: "Failed to generate gift ideas" },
-        { status: 500 }
-      );
-    }
+    // Parse the JSON response
+    const giftIdeas = JSON.parse(text);
 
-    try {
-      const parsedResponse = JSON.parse(responseText);
-      return NextResponse.json(parsedResponse);
-    } catch (e) {
-      console.error("Failed to parse OpenAI response:", e);
-      return NextResponse.json(
-        {
-          error: "Failed to parse gift ideas",
-          rawResponse: responseText,
-        },
-        { status: 500 }
-      );
-    }
+    return Response.json(giftIdeas);
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json(
+    console.error("Error generating gift ideas:", error);
+    return Response.json(
       { error: "Failed to generate gift ideas" },
       { status: 500 }
     );

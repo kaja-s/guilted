@@ -1,6 +1,5 @@
+import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { streamText } from "ai";
-import { NextResponse } from "next/server";
 
 // Telling Next.js which environment we want to use (Node.js).
 export const runtime = "nodejs";
@@ -34,19 +33,18 @@ export async function POST(req: Request) {
       }
     `;
 
-    const { text } = await streamText({
+    const { text } = await generateText({
       model: openai("gpt-4o"),
       prompt,
     });
-
     // Parse the response as JSON
-    const recipe = JSON.parse(await text);
+    const giftIdeas = JSON.parse(text);
 
-    return NextResponse.json({ recipe });
+    return Response.json(giftIdeas);
   } catch (error) {
-    console.error("Error generating recipe:", error);
-    return NextResponse.json(
-      { error: "Failed to generate recipe" },
+    console.error("Error generating gift recipe:", error);
+    return Response.json(
+      { error: "Failed to generate gift recipe" },
       { status: 500 }
     );
   }
