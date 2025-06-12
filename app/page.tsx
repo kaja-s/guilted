@@ -49,7 +49,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json", // Tells the server that it's sending JSON data.
         },
-        body: JSON.stringify({ friendPreferences: preferences }), // Conversts a JS object containing user's preferences into a JSON string.
+        body: JSON.stringify(preferences), // Send preferences directly
       });
       if (!response.ok) {
         throw new Error("Failed to generate gift ideas.");

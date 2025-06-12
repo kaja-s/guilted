@@ -7,11 +7,23 @@ import { openai } from "@ai-sdk/openai";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
-const openaiApiKey = process.env.OPENAI_API_KEY;
 // POST handles form submissions. We use await req.json() to read the message. friendPreferences includes the friend’s interests, love language, and budget.
 export async function POST(req: Request) {
   try {
     const { interests, loveLanguage, budget } = await req.json();
+
+    // Validate input parameters
+    if (!interests || !loveLanguage || !budget) {
+      console.error("Missing required parameters:", {
+        interests,
+        loveLanguage,
+        budget,
+      });
+      return Response.json(
+        { error: "Missing required parameters" },
+        { status: 400 }
+      );
+    }
 
     const prompt = `
             Generate 3 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
@@ -28,9 +40,9 @@ export async function POST(req: Request) {
             Format the response as a JSON array of objects with the following structure:
             [
                 {
-                "id": 1,
-                "title": "Gift Title",
-                "description": "Short description of the gift"
+                    "id": 1,
+                    "title": "Gift Title",
+                    "description": "Short description of the gift"
                 }
             ]
         `;
@@ -40,39 +52,54 @@ export async function POST(req: Request) {
     // GPT returns a big text blob like: [ { "id": 1, "title": "Gift Title", "description": "Short description of the gift"}, ...]
 
     console.log("Sending request to OpenAI...");
+    console.log("Prompt:", prompt);
 
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-3.5-turbo",
-      temperature: 0.7,
-      response_format: { type: "json_object" },
+    const { text } = await generateText({
+      model: openai("gpt-4o"),
+      prompt,
     });
-    const responseText = completion.choices[0].message.content;
 
-    if (!responseText) {
-      return NextResponse.json(
-        { error: "Failed to generate gift ideas" },
-        { status: 500 }
-      );
-    }
+    console.log("Raw response from OpenAI:", text);
 
+    // Validate and parse the JSON response
+    let giftIdeas;
     try {
-      const parsedResponse = JSON.parse(responseText);
-      return NextResponse.json(parsedResponse);
-    } catch (e) {
-      console.error("Failed to parse OpenAI response:", e);
-      return NextResponse.json(
-        {
-          error: "Failed to parse gift ideas",
-          rawResponse: responseText,
-        },
+      giftIdeas = JSON.parse(text);
+
+      // Validate the structure of the response
+      if (!Array.isArray(giftIdeas)) {
+        throw new Error("Response is not an array");
+      }
+
+      // Validate each gift idea has the required fields
+      giftIdeas.forEach((gift, index) => {
+        if (!gift.id || !gift.title || !gift.description) {
+          throw new Error(`Invalid gift idea at index ${index}`);
+        }
+      });
+    } catch (parseError: unknown) {
+      console.error("Error parsing OpenAI response:", parseError);
+      console.error("Raw response:", text);
+      return Response.json(
+        { error: "Invalid response format from OpenAI" },
         { status: 500 }
       );
     }
-  } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate gift ideas" },
+
+    return Response.json(giftIdeas);
+  } catch (error: unknown) {
+    console.error("Error generating gift ideas:", error);
+    // Log the full error object for debugging
+    console.error("Full error details:", {
+      name: error instanceof Error ? error.name : "Unknown",
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return Response.json(
+      {
+        error: "Failed to generate gift ideas",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     );
   }
