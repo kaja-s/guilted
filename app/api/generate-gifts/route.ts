@@ -12,6 +12,19 @@ export async function POST(req: Request) {
   try {
     const { interests, loveLanguage, budget } = await req.json();
 
+    // Validate input parameters
+    if (!interests || !loveLanguage || !budget) {
+      console.error("Missing required parameters:", {
+        interests,
+        loveLanguage,
+        budget,
+      });
+      return Response.json(
+        { error: "Missing required parameters" },
+        { status: 400 }
+      );
+    }
+
     const prompt = `
             Generate 3 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
 
@@ -27,9 +40,9 @@ export async function POST(req: Request) {
             Format the response as a JSON array of objects with the following structure:
             [
                 {
-                "id": 1,
-                "title": "Gift Title",
-                "description": "Short description of the gift"
+                    "id": 1,
+                    "title": "Gift Title",
+                    "description": "Short description of the gift"
                 }
             ]
         `;
@@ -39,20 +52,54 @@ export async function POST(req: Request) {
     // GPT returns a big text blob like: [ { "id": 1, "title": "Gift Title", "description": "Short description of the gift"}, ...]
 
     console.log("Sending request to OpenAI...");
+    console.log("Prompt:", prompt);
 
     const { text } = await generateText({
       model: openai("gpt-4o"),
       prompt,
     });
 
-    // Parse the JSON response
-    const giftIdeas = JSON.parse(text);
+    console.log("Raw response from OpenAI:", text);
+
+    // Validate and parse the JSON response
+    let giftIdeas;
+    try {
+      giftIdeas = JSON.parse(text);
+
+      // Validate the structure of the response
+      if (!Array.isArray(giftIdeas)) {
+        throw new Error("Response is not an array");
+      }
+
+      // Validate each gift idea has the required fields
+      giftIdeas.forEach((gift, index) => {
+        if (!gift.id || !gift.title || !gift.description) {
+          throw new Error(`Invalid gift idea at index ${index}`);
+        }
+      });
+    } catch (parseError: unknown) {
+      console.error("Error parsing OpenAI response:", parseError);
+      console.error("Raw response:", text);
+      return Response.json(
+        { error: "Invalid response format from OpenAI" },
+        { status: 500 }
+      );
+    }
 
     return Response.json(giftIdeas);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error generating gift ideas:", error);
+    // Log the full error object for debugging
+    console.error("Full error details:", {
+      name: error instanceof Error ? error.name : "Unknown",
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return Response.json(
-      { error: "Failed to generate gift ideas" },
+      {
+        error: "Failed to generate gift ideas",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     );
   }
