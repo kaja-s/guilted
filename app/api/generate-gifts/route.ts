@@ -63,8 +63,17 @@ export async function POST(req: Request) {
 
     // Validate and parse the JSON response
     let giftIdeas;
+
+    // The backticks and the word json are indicators that the respons should be rendereded as markdown
+    // but need to be removed if the response is to be processed as json. :)
+
+    const cleanJSON = text
+      .trim()
+      .replace(/^```json\s*/, "")
+      .replace(/```$/, "");
+    giftIdeas = JSON.parse(cleanJSON);
     try {
-      giftIdeas = JSON.parse(text);
+      giftIdeas = JSON.parse(cleanJSON);
 
       // Validate the structure of the response
       if (!Array.isArray(giftIdeas)) {
@@ -85,8 +94,7 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    return Response.json(giftIdeas);
+    return Response.json({ giftIdeas });
   } catch (error: unknown) {
     console.error("Error generating gift ideas:", error);
     // Log the full error object for debugging
