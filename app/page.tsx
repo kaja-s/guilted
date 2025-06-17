@@ -95,7 +95,7 @@ export default function Home() {
       }
 
       const data = await response.json();
-      setRecipe(data.recipe);
+      setRecipe(data);
     } catch (error) {
       console.error("Error:", error);
       // Handle error state here
