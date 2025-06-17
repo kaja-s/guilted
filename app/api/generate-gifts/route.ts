@@ -4,6 +4,7 @@
 
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { cleanJSON } from "@/lib/utils";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
@@ -67,13 +68,8 @@ export async function POST(req: Request) {
     // The backticks and the word json are indicators that the respons should be rendereded as markdown
     // but need to be removed if the response is to be processed as json. :)
 
-    const cleanJSON = text
-      .trim()
-      .replace(/^```json\s*/, "")
-      .replace(/```$/, "");
-    giftIdeas = JSON.parse(cleanJSON);
     try {
-      giftIdeas = JSON.parse(cleanJSON);
+      giftIdeas = JSON.parse(cleanJSON(text));
 
       // Validate the structure of the response
       if (!Array.isArray(giftIdeas)) {

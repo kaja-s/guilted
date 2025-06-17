@@ -1,5 +1,6 @@
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { cleanJSON } from "@/lib/utils";
 
 // Telling Next.js which environment we want to use (Node.js).
 export const runtime = "nodejs";
@@ -37,8 +38,9 @@ export async function POST(req: Request) {
       model: openai("gpt-4o"),
       prompt,
     });
+
     // Parse the response as JSON
-    const giftIdeas = JSON.parse(text);
+    const giftIdeas = JSON.parse(cleanJSON(text));
 
     return Response.json(giftIdeas);
   } catch (error) {
