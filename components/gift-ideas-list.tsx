@@ -26,6 +26,7 @@ interface GiftIdeasListProps {
 
 export function GiftIdeasList({ giftIdeas, onSelectGift }: GiftIdeasListProps) {
   // If there are no gift ideas, show nothing.
+
   if (!giftIdeas.length) {
     return null;
   }

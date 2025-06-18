@@ -39,6 +39,7 @@ export function GiftRecipe({ recipe, onBack, isLoading }: GiftRecipeProps) {
       </Card>
     );
   }
+
   if (!recipe) {
     return null;
   }

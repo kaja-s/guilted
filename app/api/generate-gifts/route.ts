@@ -4,6 +4,7 @@
 
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { cleanJSON } from "@/lib/utils";
 
 export const runtime = "nodejs"; //This tells the system to run the code on the server using Node.js and not the browser.
 
@@ -63,8 +64,12 @@ export async function POST(req: Request) {
 
     // Validate and parse the JSON response
     let giftIdeas;
+
+    // The backticks and the word json are indicators that the respons should be rendereded as markdown
+    // but need to be removed if the response is to be processed as json. :)
+
     try {
-      giftIdeas = JSON.parse(text);
+      giftIdeas = JSON.parse(cleanJSON(text));
 
       // Validate the structure of the response
       if (!Array.isArray(giftIdeas)) {
@@ -85,8 +90,7 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    return Response.json(giftIdeas);
+    return Response.json({ giftIdeas });
   } catch (error: unknown) {
     console.error("Error generating gift ideas:", error);
     // Log the full error object for debugging
