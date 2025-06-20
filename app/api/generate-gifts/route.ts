@@ -11,14 +11,34 @@ export const runtime = "nodejs"; //This tells the system to run the code on the 
 // POST handles form submissions. We use await req.json() to read the message. friendPreferences includes the friend’s interests, love language, and budget.
 export async function POST(req: Request) {
   try {
-    const { interests, loveLanguage, budget } = await req.json();
+    const {
+      interests,
+      loveLanguage,
+      budget,
+      occasion,
+      gifterPreferences,
+      timeAvailable,
+      giftType,
+    } = await req.json();
 
     // Validate input parameters
-    if (!interests || !loveLanguage || !budget) {
+    if (
+      !interests ||
+      !loveLanguage ||
+      !budget ||
+      !occasion ||
+      !gifterPreferences ||
+      !timeAvailable ||
+      !giftType
+    ) {
       console.error("Missing required parameters:", {
         interests,
         loveLanguage,
         budget,
+        occasion,
+        gifterPreferences,
+        timeAvailable,
+        giftType,
       });
       return Response.json(
         { error: "Missing required parameters" },
@@ -32,10 +52,14 @@ export async function POST(req: Request) {
             Interests: ${interests}
             Love Language: ${loveLanguage}
             Budget: ${budget}
+            Occasion: ${occasion}
+            Gifter Preferences: ${gifterPreferences}
+            Time Available: ${timeAvailable}
+            Gift Type: ${giftType}
 
             For each gift idea, provide:
             1. A title
-            2. A short description
+            2. A one sentence description
             3. A unique ID (numeric)
 
             Format the response as a JSON array of objects with the following structure:

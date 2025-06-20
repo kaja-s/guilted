@@ -9,7 +9,14 @@ export const runtime = "nodejs";
 export async function POST(req: Request) {
   try {
     // Getting the data (gift title and user's preferences) from the request.
-    const { giftTitle, friendPreferences } = await req.json();
+    const {
+      giftTitle,
+      friendPreferences,
+      occasion,
+      gifterPreferences,
+      timeAvailable,
+      giftType,
+    } = await req.json();
 
     const prompt = `
       Generate a detailed recipe for creating a homemade gift titled "${giftTitle}" for a friend with these preferences:
@@ -17,6 +24,10 @@ export async function POST(req: Request) {
       Interests: ${friendPreferences.interests}
       Love Language: ${friendPreferences.loveLanguage}
       Budget: ${friendPreferences.budget}
+      Occasion: ${occasion}
+      Gifter Preferences: ${gifterPreferences}
+      Time Available: ${timeAvailable}
+      Gift Type: ${giftType}
       
       The recipe should include:
       1. Estimated price (within the budget)
@@ -27,7 +38,8 @@ export async function POST(req: Request) {
       Format the response as a JSON object with the following structure:
       {
         "title": "${giftTitle}",
-        "estimatedPrice": "$XX",
+        "description": "One sentence description of the gift"
+        "estimatedPrice": "XX",
         "estimatedDuration": "X hours/days",
         "materials": ["item1", "item2", ...],
         "steps": ["step1", "step2", ...]
