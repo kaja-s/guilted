@@ -16,7 +16,6 @@ export async function POST(req: Request) {
       loveLanguage,
       budget,
       occasion,
-      gifterPreferences,
       timeAvailable,
       giftType,
     } = await req.json();
@@ -27,7 +26,6 @@ export async function POST(req: Request) {
       !loveLanguage ||
       !budget ||
       !occasion ||
-      !gifterPreferences ||
       !timeAvailable ||
       !giftType
     ) {
@@ -36,7 +34,6 @@ export async function POST(req: Request) {
         loveLanguage,
         budget,
         occasion,
-        gifterPreferences,
         timeAvailable,
         giftType,
       });
@@ -53,13 +50,12 @@ export async function POST(req: Request) {
             Love Language: ${loveLanguage}
             Budget: ${budget}
             Occasion: ${occasion}
-            Gifter Preferences: ${gifterPreferences}
             Time Available: ${timeAvailable}
             Gift Type: ${giftType}
 
             For each gift idea, provide:
             1. A title
-            2. A one sentence description
+            2. A one short sentence description
             3. A unique ID (numeric)
 
             Format the response as a JSON array of objects with the following structure:

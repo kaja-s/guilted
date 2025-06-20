@@ -27,7 +27,6 @@ export interface FriendPreferences {
   loveLanguage: string[];
   budget: string;
   occasion: string;
-  gifterPreferences: string;
   timeAvailable: string;
   giftType: string;
 }
@@ -60,7 +59,6 @@ export function FriendPreferencesForm({
     loveLanguage: [],
     budget: "",
     occasion: "",
-    gifterPreferences: "",
     timeAvailable: "",
     giftType: "",
   });
@@ -197,22 +195,6 @@ export function FriendPreferencesForm({
                 <SelectItem value="No time limit">No time limit</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          {/* Gifter Preferences */}
-          <div className="space-y-2">
-            <Label htmlFor="gifterPreferences">
-              Your Preferences & Skills (Keywords)
-            </Label>
-            <Textarea
-              id="gifterPreferences"
-              name="gifterPreferences"
-              placeholder="What are you good at or enjoy doing? (e.g., baking, crafting, photography, writing, sewing)"
-              value={preferences.gifterPreferences}
-              onChange={handleChange}
-              required
-              className="min-h-[80px]"
-            />
           </div>
 
           {/* Solo or Group Gift */}
