@@ -94,130 +94,138 @@ export function FriendPreferencesForm({
   };
 
   return (
-    <Card className="w-full max-w-md bg-white">
+    <Card className="w-full max-w-lg bg-white">
       <CardHeader>
         <CardTitle className="text-xl">{"Friend's Preferences"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Interests */}
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="interests">Interests & Hobbies</Label>
-            <Textarea
-              id="interests"
-              name="interests"
-              placeholder="What does your friend enjoy? (e.g., cooking, reading, hiking, art)"
-              onChange={handleChange}
-              required
-              className="min-h-[100px]"
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Interests */}
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="interests">Interests & Hobbies</Label>
+              <Textarea
+                id="interests"
+                name="interests"
+                placeholder="What does your friend enjoy? (e.g., cooking, reading, hiking, art)"
+                onChange={handleChange}
+                required
+                className="min-h-[100px]"
+              />
+            </div>
 
-          {/* Love Language */}
-          <div className="space-y-3 md:col-span-2">
-            <Label>Love Languages (Select all that apply)</Label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {LOVE_LANGUAGES.map((loveLanguage) => (
-                <div key={loveLanguage} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={loveLanguage}
-                    checked={preferences.loveLanguage.includes(loveLanguage)}
-                    onCheckedChange={(checked) =>
-                      handleLoveLanguageChange(loveLanguage, checked as boolean)
-                    }
-                  />
-                  <Label
-                    htmlFor={loveLanguage}
-                    className="text-sm font-normal cursor-pointer"
-                  >
-                    {loveLanguage}
+            {/* Time Available */}
+            <div className="space-y-2">
+              <Label htmlFor="timeAvailable">Time Available to Create</Label>
+              <Select
+                value={preferences.timeAvailable}
+                onValueChange={handleSelectChange("timeAvailable")}
+              >
+                <SelectTrigger id="timeAvailable">
+                  <SelectValue placeholder="Select time available" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1-2 hours">1-2 hours</SelectItem>
+                  <SelectItem value="Half a day">Half a day</SelectItem>
+                  <SelectItem value="1 day">1 day</SelectItem>
+                  <SelectItem value="2-3 days">2-3 days</SelectItem>
+                  <SelectItem value="1 week">1 week</SelectItem>
+                  <SelectItem value="2+ weeks">2+ weeks</SelectItem>
+                  <SelectItem value="No time limit">No time limit</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Solo or Group Gift */}
+            <div className="space-y-3">
+              <Label>Gift Type</Label>
+              <RadioGroup
+                value={preferences.giftType}
+                onValueChange={handleSelectChange("giftType")}
+                className="flex flex-col space-y-1"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="solo" id="solo" />
+                  <Label htmlFor="solo" className="font-normal">
+                    Solo gift
                   </Label>
                 </div>
-              ))}
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="group" id="group" />
+                  <Label htmlFor="group" className="font-normal">
+                    Group gift
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
-          </div>
 
-          {/* Occasion */}
-          <div className="space-y-2">
-            <Label htmlFor="occasion">Occasion</Label>
-            <Select
-              value={preferences.occasion}
-              onValueChange={handleSelectChange("occasion")}
-            >
-              <SelectTrigger id="occasion">
-                <SelectValue placeholder="Select occasion" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Birthday">Birthday</SelectItem>
-                <SelectItem value="Anniversary">Anniversary</SelectItem>
-                <SelectItem value="Christmas">Christmas</SelectItem>
-                <SelectItem value="Graduation">Graduation</SelectItem>
-                <SelectItem value="Housewarming">Housewarming</SelectItem>
-                <SelectItem value="Thank You">Thank You</SelectItem>
-                <SelectItem value="Just because">Just Because</SelectItem>
-                <SelectItem value="Apology">Apology</SelectItem>
-                <SelectItem value="Get well soon">Get Well Soon</SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Occasion */}
+            <div className="space-y-2">
+              <Label htmlFor="occasion">Occasion</Label>
+              <Select
+                value={preferences.occasion}
+                onValueChange={handleSelectChange("occasion")}
+              >
+                <SelectTrigger id="occasion">
+                  <SelectValue placeholder="Select occasion" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Birthday">Birthday</SelectItem>
+                  <SelectItem value="Anniversary">Anniversary</SelectItem>
+                  <SelectItem value="Christmas">Christmas</SelectItem>
+                  <SelectItem value="Graduation">Graduation</SelectItem>
+                  <SelectItem value="Housewarming">Housewarming</SelectItem>
+                  <SelectItem value="Thank You">Thank You</SelectItem>
+                  <SelectItem value="Just because">Just Because</SelectItem>
+                  <SelectItem value="Apology">Apology</SelectItem>
+                  <SelectItem value="Get well soon">Get Well Soon</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Budget */}
-          <div className="space-y-2">
-            <Label htmlFor="budget">Budget</Label>
-            <Input
-              id="budget"
-              name="budget"
-              placeholder="e.g., $20, $50, $100"
-              value={preferences.budget}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            {/* Budget */}
+            <div className="space-y-2">
+              <Label htmlFor="budget">Budget</Label>
+              <Input
+                id="budget"
+                name="budget"
+                placeholder="e.g., $20, $50, $100"
+                value={preferences.budget}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          {/* Time Available */}
-          <div className="space-y-2">
-            <Label htmlFor="timeAvailable">Time Available to Create</Label>
-            <Select
-              value={preferences.timeAvailable}
-              onValueChange={handleSelectChange("timeAvailable")}
-            >
-              <SelectTrigger id="timeAvailable">
-                <SelectValue placeholder="Select time available" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1-2 hours">1-2 hours</SelectItem>
-                <SelectItem value="Half a day">Half a day</SelectItem>
-                <SelectItem value="1 day">1 day</SelectItem>
-                <SelectItem value="2-3 days">2-3 days</SelectItem>
-                <SelectItem value="1 week">1 week</SelectItem>
-                <SelectItem value="2+ weeks">2+ weeks</SelectItem>
-                <SelectItem value="No time limit">No time limit</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Solo or Group Gift */}
-          <div className="space-y-3">
-            <Label>Gift Type</Label>
-            <RadioGroup
-              value={preferences.giftType}
-              onValueChange={handleSelectChange("giftType")}
-              className="flex flex-col space-y-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="solo" id="solo" />
-                <Label htmlFor="solo" className="font-normal">
-                  Solo gift (just from me)
-                </Label>
+            {/* Love Language */}
+            <div className="space-y-3 md:col-span-2">
+              <Label>Love Languages (Select all that apply)</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {LOVE_LANGUAGES.map((loveLanguage) => (
+                  <div
+                    key={loveLanguage}
+                    className="flex items-center space-x-2"
+                  >
+                    <Checkbox
+                      id={loveLanguage}
+                      checked={preferences.loveLanguage.includes(loveLanguage)}
+                      onCheckedChange={(checked) =>
+                        handleLoveLanguageChange(
+                          loveLanguage,
+                          checked as boolean
+                        )
+                      }
+                    />
+                    <Label
+                      htmlFor={loveLanguage}
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      {loveLanguage}
+                    </Label>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="group" id="group" />
-                <Label htmlFor="group" className="font-normal">
-                  Group gift (coordinating with others)
-                </Label>
-              </div>
-            </RadioGroup>
+            </div>
           </div>
 
           {/* Submit Button */}
