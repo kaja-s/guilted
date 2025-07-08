@@ -161,7 +161,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background px-4">
+    <main className="min-h-screen bg-background px-4 pb-10">
       <div className="text-center px-4 py-6 sm:py-8">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-purple">
           Guilted
@@ -197,8 +197,8 @@ export default function Home() {
             {giftIdeas.length > 0 && (
               <Button
                 variant="default"
-                size="sm"
-                className="mt-4 px-4 py-2 bg-purple text-white"
+                size="lg"
+                className="bg-purple text-white"
                 onClick={handleRegenerate}
                 disabled={isRegenerating || isLoadingIdeas}
               >
