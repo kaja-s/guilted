@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Gift } from "lucide-react";
+import { Gift, RefreshCw } from "lucide-react";
 
 // Each gift idea should have three things - an id, title, and description.
 export interface GiftIdea {
@@ -22,18 +22,48 @@ export interface GiftIdea {
 interface GiftIdeasListProps {
   giftIdeas: GiftIdea[];
   onSelectGift: (gift: GiftIdea) => void;
+  onRegenerate?: () => void;
+  isRegenerating?: boolean;
+  canRegenerate?: boolean;
 }
 
-export function GiftIdeasList({ giftIdeas, onSelectGift }: GiftIdeasListProps) {
-  // If there are no gift ideas, show nothing.
-
+export function GiftIdeasList({
+  giftIdeas,
+  onSelectGift,
+  onRegenerate,
+  isRegenerating = false,
+  canRegenerate = false,
+}: GiftIdeasListProps) {
   if (!giftIdeas.length) {
     return null;
   }
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-center">Gift Ideas</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-xl sm:text-2xl font-bold">Gift Ideas</h2>
+
+        {canRegenerate && onRegenerate && (
+          <Button
+            variant="outline"
+            onClick={onRegenerate}
+            disabled={isRegenerating}
+            className="flex items-center gap-2 h-10 px-4 bg-transparent"
+          >
+            {isRegenerating ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-b-2 border-current"></div>
+                <span className="text-sm">Regenerating...</span>
+              </>
+            ) : (
+              <>
+                <RefreshCw className="h-4 w-4" />
+                <span className="text-sm">Try Different Ideas</span>
+              </>
+            )}
+          </Button>
+        )}
+      </div>
       {/*  Loops through all the gifts and for each one builds a card. */}
       <div className="grid gap-4 md:grid-cols-3">
         {giftIdeas.map((gift) => (

@@ -23,6 +23,7 @@ export default function Home() {
   } | null>(null);
   const [isLoadingIdeas, setIsLoadingIdeas] = useState(false);
   const [isLoadingRecipe, setIsLoadingRecipe] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
   {
     /*  
@@ -107,6 +108,55 @@ export default function Home() {
   const handleBackToGifts = () => {
     setSelectedGift(null);
     setRecipe(null);
+  };
+
+  {
+    /* Regenerate the gift ideas*/
+  }
+  const handleRegenerate = async () => {
+    if (!friendPreferences) return;
+
+    setIsRegenerating(true);
+    setGiftIdeas([]);
+    setSelectedGift(null);
+    setRecipe(null);
+
+    try {
+      console.log(
+        "Regenerating gift ideas with preferences:",
+        friendPreferences
+      );
+
+      const response = await fetch("/api/generate-gifts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ friendPreferences: friendPreferences }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate gift ideas");
+      }
+
+      console.log("Received new gift ideas:", data);
+
+      if (
+        !data.giftIdeas ||
+        !Array.isArray(data.giftIdeas) ||
+        data.giftIdeas.length === 0
+      ) {
+        throw new Error("No gift ideas were generated. Please try again.");
+      }
+
+      setGiftIdeas(data.giftIdeas);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsRegenerating(false);
+    }
   };
 
   return (
