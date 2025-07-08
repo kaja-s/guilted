@@ -37,22 +37,25 @@ export function GiftIdeasList({ giftIdeas, onSelectGift }: GiftIdeasListProps) {
       {/*  Loops through all the gifts and for each one builds a card. */}
       <div className="grid gap-4 md:grid-cols-3">
         {giftIdeas.map((gift) => (
-          <Card key={gift.id} className="flex flex-col h-full">
+          <Card
+            key={gift.id}
+            className="flex flex-col h-full gift-card-hover bg-white"
+          >
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Gift className="h-5 w-5" />
-                {gift.title}
+              <CardTitle className="flex items-start gap-2 text-base sm:text-lg leading-tight">
+                <Gift className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 mt-0.5" />
+                <span className="line-clamp-2">{gift.title}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-grow">
-              <CardDescription className="text-sm">
+              <CardDescription className="text-xs sm:text-sm">
                 {gift.description}
               </CardDescription>
             </CardContent>
             <CardFooter>
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full h-10 text-sm bg-transparent"
                 onClick={() => onSelectGift(gift)}
               >
                 View Recipe

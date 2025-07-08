@@ -110,10 +110,12 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="flex flex-col items-center justify-center mb-8">
-        <h1 className="text-4xl font-bold mb-2 text-purple">Guilted</h1>
-        <p className="text-lg text-center text-muted-foreground">
+    <main className="min-h-screen bg-background px-4">
+      <div className="text-center px-4 py-6 sm:py-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-purple">
+          Guilted
+        </h1>
+        <p className="text-sm sm:text-lg text-muted-foreground">
           Find personalized, creative, and homemade gift ideas for your friends
         </p>
       </div>

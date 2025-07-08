@@ -94,29 +94,35 @@ export function FriendPreferencesForm({
   };
 
   return (
-    <Card className="w-full max-w-lg bg-white">
+    <Card className="w-full bg-white">
       <CardHeader>
-        <CardTitle className="text-xl">{"Friend's Preferences"}</CardTitle>
+        <CardTitle className="text-xl sm:text-2xl text-center sm:text-left">
+          {"Friend's Preferences"}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Interests */}
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="interests">Interests & Hobbies</Label>
+              <Label htmlFor="interests" className="text-sm font-medium">
+                Interests & Hobbies
+              </Label>
               <Textarea
                 id="interests"
                 name="interests"
                 placeholder="What does your friend enjoy? (e.g., cooking, reading, hiking, art)"
                 onChange={handleChange}
                 required
-                className="min-h-[100px]"
+                className="min-h-[80px] text-sm"
               />
             </div>
 
             {/* Time Available */}
             <div className="space-y-2">
-              <Label htmlFor="timeAvailable">Time Available to Create</Label>
+              <Label htmlFor="timeAvailable" className="text-sm font-medium">
+                Time Available to Create
+              </Label>
               <Select
                 value={preferences.timeAvailable}
                 onValueChange={handleSelectChange("timeAvailable")}
@@ -138,7 +144,7 @@ export function FriendPreferencesForm({
 
             {/* Solo or Group Gift */}
             <div className="space-y-3">
-              <Label>Gift Type</Label>
+              <Label className="text-sm font-medium">Gift Type</Label>
               <RadioGroup
                 value={preferences.giftType}
                 onValueChange={handleSelectChange("giftType")}
@@ -146,13 +152,13 @@ export function FriendPreferencesForm({
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="solo" id="solo" />
-                  <Label htmlFor="solo" className="font-normal">
+                  <Label htmlFor="solo" className="text-sm font-normal">
                     Solo gift
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="group" id="group" />
-                  <Label htmlFor="group" className="font-normal">
+                  <Label htmlFor="group" className="text-sm font-normal">
                     Group gift
                   </Label>
                 </div>
@@ -161,12 +167,14 @@ export function FriendPreferencesForm({
 
             {/* Occasion */}
             <div className="space-y-2">
-              <Label htmlFor="occasion">Occasion</Label>
+              <Label htmlFor="occasion" className="text-sm font-medium">
+                Occasion
+              </Label>
               <Select
                 value={preferences.occasion}
                 onValueChange={handleSelectChange("occasion")}
               >
-                <SelectTrigger id="occasion">
+                <SelectTrigger id="occasion" className="h-11">
                   <SelectValue placeholder="Select occasion" />
                 </SelectTrigger>
                 <SelectContent>
@@ -186,7 +194,9 @@ export function FriendPreferencesForm({
 
             {/* Budget */}
             <div className="space-y-2">
-              <Label htmlFor="budget">Budget</Label>
+              <Label htmlFor="budget" className="text-sm font-medium">
+                Budget
+              </Label>
               <Input
                 id="budget"
                 name="budget"
@@ -199,7 +209,9 @@ export function FriendPreferencesForm({
 
             {/* Love Language */}
             <div className="space-y-3 md:col-span-2">
-              <Label>Love Languages (Select all that apply)</Label>
+              <Label className="text-sm font-medium">
+                Love Languages (Select all that apply)
+              </Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {LOVE_LANGUAGES.map((loveLanguage) => (
                   <div
@@ -215,10 +227,11 @@ export function FriendPreferencesForm({
                           checked as boolean
                         )
                       }
+                      className="flex-shrink-0"
                     />
                     <Label
                       htmlFor={loveLanguage}
-                      className="text-sm font-normal cursor-pointer"
+                      className="text-sm font-normal cursor-pointer flex-1 leading-5"
                     >
                       {loveLanguage}
                     </Label>
