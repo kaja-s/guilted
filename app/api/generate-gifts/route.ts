@@ -44,7 +44,13 @@ export async function POST(req: Request) {
     }
 
     const prompt = `
-            Generate 3 personalized, creative, and mostly homemade gift ideas for a friend with the following preferences:
+            Generate 3 unique, creative, and personalized gift ideas for a friend with the following preferences. Each idea should:
+            - Be thoughtful and meaningful based on the recipient’s interests
+            - Include at least one homemade or handmade element (fully or partially)
+            - Be distinctly different from the other two ideas (e.g., in theme, medium, or experience)
+            - Avoid clichés or generic ideas – surprise with originality or unexpected twists
+            
+            The goal is to keep ideas fresh, surprising, and non-repetitive, especially across multiple uses of this prompt.
 
             Interests: ${interests}
             Love Language: ${loveLanguage}
