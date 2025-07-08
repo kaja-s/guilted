@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Clock, DollarSign, List, ArrowLeft, ChevronLeft } from "lucide-react";
+import { Clock, DollarSign, List, ChevronLeft } from "lucide-react";
 
 // Setting up the rules on how the recipe should look like.
 export interface GiftRecipe {
