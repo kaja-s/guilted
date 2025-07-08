@@ -7,6 +7,7 @@ import {
 } from "@/components/friend-preferences-form";
 import { GiftIdeasList, type GiftIdea } from "@/components/gift-ideas-list";
 import { GiftRecipe } from "@/components/gift-recipe";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   // friendPreferences – stores the answers from the form (e.g., hobbies, love language)
@@ -193,6 +194,17 @@ export default function Home() {
               giftIdeas={giftIdeas}
               onSelectGift={handleSelectGift}
             />
+            {giftIdeas.length > 0 && (
+              <Button
+                variant="default"
+                size="sm"
+                className="mt-4 px-4 py-2 bg-purple text-white"
+                onClick={handleRegenerate}
+                disabled={isRegenerating || isLoadingIdeas}
+              >
+                {isRegenerating ? "Regenerating..." : "Regenerate Ideas"}
+              </Button>
+            )}
           </>
         ) : (
           <GiftRecipe

@@ -46,7 +46,10 @@ export function GiftIdeasList({
         {canRegenerate && onRegenerate && (
           <Button
             variant="outline"
-            onClick={onRegenerate}
+            onClick={() => {
+              console.log("Regenerate button clicked");
+              onRegenerate();
+            }}
             disabled={isRegenerating}
             className="flex items-center gap-2 h-10 px-4 bg-transparent"
           >
