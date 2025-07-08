@@ -204,6 +204,7 @@ export function FriendPreferencesForm({
                 value={preferences.budget}
                 onChange={handleChange}
                 required
+                className="min-h-[80px] text-sm"
               />
             </div>
 
