@@ -175,13 +175,17 @@ export default function Home() {
           <>
             <FriendPreferencesForm
               onSubmit={handlePreferenceSubmit}
-              isLoading={isLoadingIdeas}
+              isLoading={isLoadingIdeas || isRegenerating}
             />
 
-            {isLoadingIdeas && (
+            {(isLoadingIdeas || isRegenerating) && (
               <div className="flex flex-col items-center justify-center space-y-4 mt-8">
                 <div className="h-8 w-8 animate-spin rounded-full border-t-2 border-b-2 border-primary"></div>
-                <p>Generating gift ideas...</p>
+                <p className="text-sm text-muted-foreground">
+                  {isRegenerating
+                    ? "Regenerating gift ideas..."
+                    : "Generating gift ideas..."}
+                </p>
               </div>
             )}
 
